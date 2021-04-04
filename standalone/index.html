@@ -1,0 +1,174 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+		<title>Spemail - Perfect Privacy for your Webmail</title>
+		<link type="text/css" href="jquery/ui.all.css" rel="Stylesheet" />	
+		<script type="text/javascript" src="jquery/jquery-1.3.js"></script>
+		<script type="text/javascript" src="jquery/jquery.ui.all.js"></script>
+        <script type="text/javascript" src="codec.js"></script>
+        <script type="text/javascript" src="debian.js"></script>
+        <script type="text/javascript" src="codec.huffmanmarkov.js"></script>
+        <script type="text/javascript" src="secretsharing.js"></script>
+		<script type="text/javascript" src="jquery/spemail.js"></script>
+	</head>
+	<body>
+		
+<div id="compGroupA" class="clearfix">
+					
+			<!-- Tabs -->
+			<div id="tabs">
+				<ul>
+					<li class="ui-tabs-nav-item"><a href="#welcome">Welcome!</a></li>
+					<li class="ui-tabs-nav-item"><a href="#encode">Encode</a></li>
+					<li class="ui-tabs-nav-item"><a href="#decode">Decode</a></li>
+					<li class="ui-tabs-nav-item"><a href="#play">Play</a></li>
+					<li class="ui-tabs-nav-item"><a href="#help"><img src="lifesaver.gif" alt="Lifesaver icon" style="border:none"/>Help us!</a></li>
+				</ul>
+				<div id="welcome">
+				<h2>They can read your webmail.  We can help.</h2>
+				<table><tr><td width="70%">
+				Web-based mail, with all of its advantages, comes with a very serious privacy flaw - 
+				all messages are stored in a single central location on the webmail operator's data center. 
+				This fact makes these data centers a natural interception point for various undesirable parties 
+				and severely risks your privacy as a webmail user.<br/><br/>
+
+                You can solve this problem and protect your privacy by using <b>secret sharing:</b>
+                Split each message into two shares and the shares through two different
+                webmail providers.<br/><br/>
+                
+                On this site you can <a href="#encode" class="tabswitch">encode</a> your own private mail, <a href="#decode" class="tabswitch">decode</a> a private 
+                mail somebody else sent you, or have a fun time <a href="#play" class="tabswitch">exploring and playing</a> with secret sharing. <br/>
+                
+                This is an open-source project - we'd love you to <a href="#help" class="tabswitch">help us out!</a><br/>
+                <br/>
+                
+                <a href="about:blank">Send me a private mail to get me started!</a>
+                
+                <h4><img src="add-to-firefox.png" alt="Add to Firefox"/>Get the <a href="about:blank">Firefox Addon</a> to add Spemail to your Gmail!</h4>
+				</td><td>
+				<img src="spemail.png" alt="Secret Sharing" style="height:600px"/></td></tr></table>
+				</div>
+				<div id="encode"> 
+				<h2>Encode a private message into secret shares.</h2>
+    <table>
+        <tr>
+            <td colspan="2" style="text-align: center">
+                Input Text
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <textarea cols="80" id="InputText" style="width: 100%; font-size: 125%; font-family: 'corbel'"
+                    name="S1" rows="2"></textarea>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2" style="text-align: center">
+                V
+            </td>            
+        </tr>
+        <tr>
+            <td colspan="2" style="text-align: center">
+                Secret shares (send each one using a different webmail provider)
+            </td>            
+        </tr>
+        <tr>
+            <td colspan="1">
+                <textarea cols="40" id="Encoded1" style="width: 100%; font-size: 100%; font-family: 'corbel'"
+                    name="S1" rows="11"></textarea>
+            </td>
+            <td colspan="1">
+                <textarea cols="40" id="Encoded2" style="width: 100%; font-size: 100%; font-family: 'corbel'"
+                    name="S1" rows="11"></textarea>
+            </td>
+        </tr>
+        </table>
+				
+				</div>
+				<div id="decode">
+				<h2>Decode a private message from a pair of secret shares.</h2>
+    <table>
+        <tr>
+            <td colspan="2" style="text-align: center">
+                Secret shares 
+            </td>            
+        </tr>
+        <tr>
+            <td colspan="1">
+                <textarea cols="40" id="Share1" style="width: 100%; font-size: 100%; font-family: 'corbel'"
+                    name="S1" rows="11"></textarea>
+            </td>
+            <td colspan="1">
+                <textarea cols="40" id="Share2" style="width: 100%; font-size: 100%; font-family: 'corbel'"
+                    name="S1" rows="11"></textarea>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2" style="text-align: center">
+                Decoded Result
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2" style="text-align: center">
+                V
+            </td>            
+        </tr>
+        <tr>
+            <td colspan="2">
+                <textarea cols="80" id="Decoding" style="width: 100%; font-size: 125%; font-family: 'corbel'"
+                    name="S1" rows="2"></textarea>
+            </td>
+        </tr>
+        </table>
+				
+				</div>
+				<div id="play">
+				    <h2>Play and Learn about Secret Sharing</h2>
+				    Secret sharing is a very cool idea - we actually wrote a paper about it.  Why don't you <a href="OrenWool-SPEmail-usec09-300109.pdf">read it</a>?
+				    </div>
+				<div id="help">
+				    <h2>Helping out</h2>
+The code is designed to be extended and maintained in the form of an open-source project, and as such
+was designed to accomodate contributors with different levels of technical expertise and commitment. We have identified several areas in which outside help is very welcome:
+<ul>
+    <li>
+First and foremost, contributors can provide support for additional output languages by collecting
+reference corpora in these languages and using them to construct Huffman-Markov DictionaryTree data
+structures. An online tool provided for this purpose can be found at <a href="http://code.google.com/p/spemail">the project page at Google Code</a>.
+    </li>
+    <li>
+Contributors can also provide integration with additional webmail systems by writing additional implementations
+of the ClientIntegration class, based on modified versions of the included Gmail support
+class.
+    </li>
+    <li>
+ Contributors can also provide additional codec algorithms by writing additional implementations
+of the Codec class. The reasoning that led us to create the reverse Huffman codec might be applicable to
+other codebook-based compression methods as well. It also seems natural to use standard steganographic
+methods to embed the secret share in a human-generated "carrier" message. 				    
+    </li>
+</ul>
+
+				</div>
+			</div>
+			
+			<em>Copyright 2009 by Tel Aviv University - All rights reserved.  Legal Policy.  And so on.  And so Forth.</em>
+
+		
+		
+<!-- Start of StatCounter Code -->
+<script type="text/javascript">
+var sc_project=4239793; 
+var sc_invisible=1; 
+var sc_partition=34; 
+var sc_click_stat=1; 
+var sc_security="94293f3a"; 
+</script>
+
+<script type="text/javascript" src="http://www.statcounter.com/counter/counter.js"></script><noscript><div class="statcounter"><a title="free hit counter" href="http://www.statcounter.com/" target="_blank"><img class="statcounter" src="http://c.statcounter.com/4239793/0/94293f3a/1/" alt="free hit counter" ></a></div></noscript>
+<!-- End of StatCounter Code -->
+	</body>
+</html>
+
+
