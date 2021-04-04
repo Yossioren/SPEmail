@@ -1,0 +1,390 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Huffman-Markov Expansion Rate testbench</title>
+    <style type="text/css">
+        </style>
+    <!-- Google API Loader - http://code.google.com/apis/ajaxlibs/ -->
+
+<!--    <script type="text/javascript" src="http://www.google.com/jsapi"></script>
+    <script type="text/javascript">
+        /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  */
+        
+
+        // Load jQuery
+        google.load("jquery", "1", { uncompressed: true });
+    </script>-->
+    <script type="text/javascript" src="jquery-1.2.6.js"></script>
+    <!--<script type="text/javascript" src="json-spaced.js"></script>-->
+    <script type="text/javascript" src="jquery.json.js"></script>
+
+    <script type="text/javascript" src="codec.js"></script>
+    <script type="text/javascript" src="codec.huffmanmarkov.js"></script>
+    <script type="text/javascript" src="secretsharing.js"></script>
+
+    <script type="text/javascript">
+        /// <reference path = "jquery-1.2.6-vsdoc.js" />
+
+        $(document).ready(function() {
+            var NEW_SENTENCE = "_NewSentence";
+            function HuffmanMarkovTreeBuilder() {
+                this.HuffmanMarkovTrees = new Array();
+                this.wordList = new Array();
+                this.statistics = new Array();
+            };
+
+            // Create the two-word distribution table for the given source text
+            HuffmanMarkovTreeBuilder.prototype.buildWordDistribution = function(inText) {
+                // A new sentence is the ground state for our field.
+                previousWord = NEW_SENTENCE;
+                // The fan-in of a new sentence is 0... we actually only care about the fan out here.
+                this.wordList = new Array();
+                this.wordList[NEW_SENTENCE] = { "_FanIn": "0" };
+
+                // For each word in the document:
+                // TODO: This regex should be tweaked:
+                // TODO: refactor this function!  It sucks!!!
+                // Mr. Mrs. and so on should not end a sentence
+                // Quotations should be handled properly
+                allWords = inText./*toLowerCase().*/split(/[^a-zA-Z\'\.\"]+/);
+                for (word in allWords) {
+                    // Check if it's the end of a sentence.
+                    var endOfSentence = (allWords[word].lastIndexOf(".") != -1);
+
+                    var currentWord;
+                    // Trim the period
+                    if (endOfSentence) {
+                        currentWord = allWords[word].substr(0, allWords[word].length - 1);
+                    } else {
+                        currentWord = allWords[word];
+                    }
+
+
+                    // Skip unprintable characters.
+                    if (currentWord.length == 0) continue;
+
+                    // Add "@" to the beginning of the word (to stay away from reserved keywords such as sort, length, concat etc)
+                    currentWord = "@" + currentWord;
+
+                    // Increment the fan-out of the previous word
+                    if (currentWord in this.wordList[previousWord]) {
+                        this.wordList[previousWord][currentWord]++;
+                    } else {
+                        this.wordList[previousWord][currentWord] = 1;
+                    }
+
+
+                    // Increment the fan-in of this current word.
+                    if (currentWord in this.wordList) {
+                        this.wordList[currentWord]._FanIn++;
+                    } else {
+                        this.wordList[currentWord] = { "_FanIn": 1 };
+                    }
+
+                    previousWord = currentWord;
+                    // if this ends with a period, automatically move on to the "new sentence" state.
+                    // TODO: use constants!
+                    if (endOfSentence) {
+                        if (NEW_SENTENCE in this.wordList[previousWord]) {
+                            this.wordList[previousWord][NEW_SENTENCE]++;
+                        } else {
+                            this.wordList[previousWord][NEW_SENTENCE] = 1;
+                        }
+
+                        previousWord = NEW_SENTENCE;
+                        this.wordList[NEW_SENTENCE]._FanIn++;
+                    }
+
+                };
+
+                // Point the last word to the New Sentence state.
+                // TODO: yuck! refactor!
+                if (NEW_SENTENCE in this.wordList[previousWord]) {
+                    this.wordList[previousWord][NEW_SENTENCE]++;
+                } else {
+                    this.wordList[previousWord][NEW_SENTENCE] = 1;
+                }
+
+                previousWord = NEW_SENTENCE;
+                this.wordList[NEW_SENTENCE]._FanIn++;
+            }
+
+            // Dequeue and return the lower value of the two queues.
+            // My queues are filled at [length] and emptied at [0]... TODO: do I use shift/unshift?
+            HuffmanMarkovTreeBuilder.prototype.dequeueLowest = function(a, b) {
+                // If one of the queues is empty, dequeue from the other one
+                if (a.length == 0) {
+                    if (b.length == 0)
+                        return null;
+                    else
+                        return b.shift();
+                }
+
+                if (b.length == 0) {
+                    return a.shift();
+                }
+
+                // Otherwise, check which of the two entries is smaller
+                if (a[0].wt < b[0].wt) {
+                    return a.shift();
+                } else {
+                    return b.shift();
+                }
+            }
+
+            // Build a single HuffmanMarkov trees for a given word in the document.
+            HuffmanMarkovTreeBuilder.prototype.buildHuffmanMarkovTree = function(wordDistribution) {
+                // Wikipedia algorithm, all comments from source: http://en.wikipedia.org/wiki/HuffmanMarkov_coding
+
+                // create a two queues, the first one containing the initial weights (along with pointers to the associated leaves),
+                var initialWeights = new Array();
+
+                // the second one containing the combined weights (along with pointers to the trees)
+                var combinedWeights = new Array();
+
+                // Enqueue all leaf nodes into the first queue 
+                // (by probability in increasing order so that the least likely item is in the head of the queue).
+                // TODO!!! Convert to a functional array operation (zip, split, etc.)
+                for (var i in wordDistribution) {
+                    if (i != "_FanIn") {
+                        initialWeights.push({ wt: wordDistribution[i], wd: i });
+                    }
+                }
+
+                initialWeights.sort(function(a, b) { return a.wt - b.wt });
+
+                // While there is more than one node in the queues
+                while (parseInt(initialWeights.length) + parseInt(combinedWeights.length) > 1) {
+                    // Dequeue the two nodes with the lowest weight by examining the fronts of both queues
+                    var leftNode = this.dequeueLowest(initialWeights, combinedWeights);
+                    var rightNode = this.dequeueLowest(initialWeights, combinedWeights);
+
+                    // Create a new internal node,
+                    var internalNode = {
+                        // with the two just-removed nodes as children 
+                        l: leftNode, r: rightNode,
+                        // and the sum of their weights as the new weight
+                        wt: parseInt(leftNode.wt) + parseInt(rightNode.wt)
+                    };
+
+                    // Enqueue the new node into the rear of the second queue
+                    combinedWeights.push(internalNode);
+                }
+
+                // The remaining node is the root node; the tree has now been generated
+                return this.dequeueLowest(initialWeights, combinedWeights);
+            }
+
+            // Collapse the tree into an associative array.
+            HuffmanMarkovTreeBuilder.prototype.flattenTree = function(node, label) {
+                // If we're a leaf, return a leaf.
+                if (node.wd != null) {
+                    var ret = new Array();
+                    ret[label] = node.wd;
+                    return ret;
+                }
+
+                // Otherwise, combine the left and the right
+                var leftTree = this.flattenTree(node.l, label + "0");
+                var rightTree = this.flattenTree(node.r, label + "1");
+
+                // Concatenate the two arrays.
+                for (var a in leftTree)
+                    rightTree[a] = leftTree[a];
+
+                return rightTree;
+
+            }
+
+            // Build a set of HuffmanMarkov trees, one for each word in the document.
+            HuffmanMarkovTreeBuilder.prototype.buildHuffmanMarkovTreesFromWordList = function() {
+                // For each word in the word list
+                for (word in this.wordList) {
+                    // Build a HuffmanMarkov tree for this word.
+                    this.HuffmanMarkovTrees[word] = this.buildHuffmanMarkovTree(this.wordList[word]);
+                    this.flatHuffmanMarkovTrees[word] = this.flattenTree(this.HuffmanMarkovTrees[word], "_");
+                }
+            }
+
+            // Recursive function to measure the bits per letter of a single word in the word list.
+            HuffmanMarkovTreeBuilder.prototype.measureEntropies = function(node, depth) {
+                if (node == null)
+                    return 0;
+
+                // Is this a leaf node?
+                // Contribution to probability is 2^(-depth)
+                if (node.wd != null) {
+                    // TODO - newsentence into "."
+                    if (node.wd == NEW_SENTENCE)
+                    // TODO: what's the real he contribution of a new sentence??
+                        return ({ bitsPerWord: depth * 1.0 / (1 << depth), bitsPerLetter: depth * 1.0 / (1 << depth) });
+                    // I'm subtracting 1 because words are prefixed with "_"
+                    return ({ bitsPerWord: depth * 1.0 / (1 << depth), bitsPerLetter: depth * 1.0 / (1 << depth) / (node.wd.length - 1) });
+                } else {
+                    // Recurse over the children
+                    leftEntropies = this.measureEntropies(node.l, parseInt(depth) + 1);
+                    rightEntropies = this.measureEntropies(node.r, parseInt(depth) + 1);
+                    var retval = {
+                        bitsPerWord: parseFloat(leftEntropies.bitsPerWord) + parseFloat(rightEntropies.bitsPerWord),
+                        bitsPerLetter: parseFloat(leftEntropies.bitsPerLetter) + parseFloat(rightEntropies.bitsPerLetter)
+                    };
+                    return retval;
+                }
+            }
+
+            // Calculate the statistics of a generated HuffmanMarkov tree set
+            HuffmanMarkovTreeBuilder.prototype.calculateStatistics = function() {
+                // Count the total word/letter count of the reference text
+                this.statistics = {
+                    totalWords: 0,
+                    totalNonShortCircuitWords: 0,
+                    totalUniqueWords: 0,
+                    totalUniqueNonShortCircuitWords: 0,
+                    totalLetters: 0
+                };
+
+                for (var i in this.wordList) {
+                    if (i != NEW_SENTENCE) {
+                        this.statistics.totalWords += parseInt(this.wordList[i]._FanIn);
+                        this.statistics.totalUniqueWords++;
+                        // Check if inserting this word actually consumes bits
+                        if (this.HuffmanMarkovTrees[i].wd == null) {
+                            this.statistics.totalUniqueNonShortCircuitWords++;
+                            this.statistics.totalNonShortCircuitWords += parseInt(this.wordList[i]._FanIn);
+                        }
+
+                        this.statistics.totalLetters += i.length;
+                    }
+                }
+
+                // Entropies not interesting
+            }
+
+            // Create a Markov-HuffmanMarkov set for a given source text
+            HuffmanMarkovTreeBuilder.prototype.buildHuffmanMarkovTrees = function(inText) {
+                // Create the HuffmanMarkov tree:
+                // Delete the tree
+                this.wordList = {};
+                this.HuffmanMarkovTrees = {};
+                this.flatHuffmanMarkovTrees = {};
+
+                // Find the bi-word distribution of the input text.
+                this.buildWordDistribution(inText);
+
+                // Build a set of HuffmanMarkov encodings for each word in the word list
+                this.buildHuffmanMarkovTreesFromWordList();
+
+                // Calculate statistics the results
+                this.calculateStatistics();
+
+
+                // Return the tree.
+                return this.flatHuffmanMarkovTrees;
+            }
+
+
+            var treeBuilder = new HuffmanMarkovTreeBuilder();
+            var previousReferenceText = "";
+            var HuffmanMarkovTrees;
+
+            var dummyText = "1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890" +
+                "1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890" +
+                "1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890" +
+                "1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890" +
+                "1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890" +
+                "1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890" +
+                "1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890" +
+                "1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890" +
+                "1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890" +
+                "1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890";
+            var benchmarkSteps = 25;
+            function calculateExpansionRate(splitting) {
+                var encodedLength = 0;
+                for (var i = 0; i < benchmarkSteps; i++) {
+                    var shares = splitting.encode(dummyText);
+                    encodedLength += shares[0].length;
+                }
+                
+                result = [encodedLength * 1.0 / benchmarkSteps / dummyText.length];
+                return result;
+            }
+
+            $("#ReferenceText").keyup(function() {
+                // Extract the source
+                var sourceVal = $(this).val();
+
+                // Check if it has changed.
+                if (previousReferenceText == sourceVal) return;
+                
+                // crashiness protection
+                if (sourceVal.length < 10) return;
+
+                // Manipulate it
+                HuffmanMarkovTrees = treeBuilder.buildHuffmanMarkovTrees(sourceVal);
+
+                // Show the trees and their statistics
+                $("#HuffmanMarkovTrees").val($.toJSON(HuffmanMarkovTrees));
+                $("#Statistics").val($.toJSON(treeBuilder.statistics));
+
+                // Calculate the expansion rate.
+                var splitting = new SecretSharing(new HuffmanMarkovCodec(HuffmanMarkovTrees, false));
+                $("#ExpansionRate").val($.toJSON({"dictionarySize" : $("#HuffmanMarkovTrees").val().length, "expansion" : calculateExpansionRate(splitting)));
+
+                previousReferenceText = sourceVal;
+            });
+
+        });
+  
+    </script>
+
+</head>
+<body>
+    <table style="width: 100%">
+        <tr>
+            <td colspan="2">
+                Reference Text
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <textarea cols="80" id="ReferenceText" style="width: 100%; font-size: 100%; font-family: 'corbel'"
+                    name="S1" rows="8"></textarea>
+            </td>
+        </tr>
+        <tr>
+            <td style="text-align: center">
+                V
+            </td>
+        </tr>
+        <tr>
+            <td style="text-align: center">
+                HuffmanMarkov Trees
+            </td>
+            <td style="text-align: center">
+                Statistics
+            </td>
+        </tr>
+        <tr>
+           <td>
+                <textarea cols="80" id="HuffmanMarkovTrees" style="width: 100%; font-size: 100%; font-family: 'corbel'"
+                    name="S2" rows="8"></textarea>
+            </td>
+           <td>
+                <textarea cols="80" id="Statistics" style="width: 100%; font-size: 100%; font-family: 'corbel'"
+                    name="S3" rows="8"></textarea>
+            </td>
+         </tr>
+        <tr>
+            <td style="text-align: center">
+                V
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <textarea cols="80" id="ExpansionRate" style="width: 100%; font-size: 100%; font-family: 'corbel'"
+                    name="S1" rows="8"></textarea>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

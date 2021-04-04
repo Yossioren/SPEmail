@@ -1,0 +1,122 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Text-handling test bench</title>
+    <style type="text/css">
+        </style>
+    <!-- Google API Loader - http://code.google.com/apis/ajaxlibs/ -->
+
+    <script type="text/javascript" src="http://www.google.com/jsapi"></script>
+
+    <script type="text/javascript">
+        /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  */
+        
+
+        // Load jQuery
+        google.load("jquery", "1", { uncompressed: true });
+
+        google.setOnLoadCallback(function() {
+            // Here's some OOP here:
+            function Codec() {
+            };
+
+            Codec.prototype.encode = function(inText) {
+                return inText;
+            }
+
+            Codec.prototype.decode = function(inText) {
+                return inText;
+            }
+
+            CommonWordsCodec.prototype = new Codec();
+            CommonWordsCodec.prototype.constructor = Codec;
+            CommonWordsCodec.prototype.baseClass = Codec.prototype.constructor;
+
+            CaseChanger.prototype = new Codec();
+            CaseChanger.prototype.constructor = Codec;
+            CaseChanger.prototype.baseClass = Codec.prototype.constructor;
+
+            var codec = CaseChanger;
+
+             $("#SourceText").keyup(function() {
+                // Extract the source
+                var sourceVal = $(this).val();
+
+                // Manipulate it
+                destVal = codec.encode(sourceVal);
+
+                $("#Share1").val(destVal);
+
+                // TODO: check if it's an array...
+                $("#Share2").val(destVal);
+            });
+
+            $("#Share2").keyup(function() {
+                // Extract the source
+                var sourceVal = $(this).val();
+
+                // Manipulate it
+                destVal = codec.decode(sourceVal);
+
+                $("#Target").val(destVal);
+            });
+        });
+  
+    </script>
+
+</head>
+<body>
+    <table style="width: 100%">
+        <tr>
+            <td colspan="2">
+                Source
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <textarea cols="80" id="SourceText" style="width: 100%; font-size: 400%; font-family: 'corbel'"
+                    name="S1" rows="2"></textarea>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2" style="text-align: center">
+                V
+            </td>
+        </tr>
+        <tr>
+            <td style="text-align: center">
+                Share 1
+            </td>
+            <td style="text-align: center">
+                Share 2
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <textarea cols="40" id="Share1" name="Share1" style="width: 100%; font-size: 250%;
+                    font-family: 'consolas'" rows="8"></textarea>
+            </td>
+            <td>
+                <textarea cols="40" id="Share2" name="Share2" style="width: 100%; font-size: 250%;
+                    font-family: 'consolas'" rows="8"></textarea>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2" style="text-align: center">
+                V
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                Target
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <textarea cols="80" id="Target" style="width: 100%; font-size: 250%; font-family: 'corbel'"
+                    name="S1" rows="2"></textarea>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

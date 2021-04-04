@@ -1,0 +1,133 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Huffman Encoder Demo</title>
+    <style type="text/css">
+        </style>
+    <!-- Google API Loader - http://code.google.com/apis/ajaxlibs/ -->
+
+<!--    <script type="text/javascript" src="http://www.google.com/jsapi"></script>
+    <script type="text/javascript">
+        /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  */
+        
+
+        // Load jQuery
+        google.load("jquery", "1", { uncompressed: true });
+    </script>-->
+    <script type="text/javascript" src="jquery-1.2.6.js"></script>
+    <!--<script type="text/javascript" src="json-spaced.js"></script>-->
+    <script type="text/javascript" src="jquery.json.js"></script>
+
+    <script type="text/javascript" src="codec.js"></script>
+    <script type="text/javascript" src="codec.base64.js"></script>
+
+    <script type="text/javascript" src="codec.commonwords2.js"></script>
+    <script type="text/javascript" src="256mostcommon.js"></script>
+
+    <script type="text/javascript" src="debian.js"></script>
+    <script type="text/javascript" src="codec.huffman.js"></script>
+    <script type="text/javascript" src="codec.huffmanmarkov.js"></script>
+
+    <script type="text/javascript" src="secretsharing.js"></script>
+
+    <script type="text/javascript">
+        /// <reference path = "jquery-1.2.6-vsdoc.js" />
+
+        // TODO:
+        previousReferenceText = "";
+
+        // Instantiate a set of sample codecs
+        var codecs = {};
+        var secretSharing = {};
+        
+        function initializeCodecs() {
+//            codecs["Huffman-Markov (David Copperfield)"] = new HuffmanMarkovCodec(copperfield, false);
+            codecs["Huffman-Markov (Debian)"] = new HuffmanMarkovCodec(debian, false);
+//            codecs["Plain"] = new Codec();
+//            codecs["Base 64"] = new Base64Codec();
+//            codecs["256 most common words in English"] = new CommonWordsCodec(encode256mc);
+//            codecs["Huffman (David Copperfield)"] = new HuffmanCodec(copperfieldSingleTree);
+//            codecs["Huffman-Markov (RFC 793)"] = new HuffmanMarkovCodec(rfc793);
+        };
+
+        $(document).ready(function() {
+            initializeCodecs();
+
+            // Create a secret-sharing object with one of the codecs.
+            // TODO: create a drop-down list, allow this to change on the fly.
+            secretSharing = new SecretSharing(codecs["Huffman-Markov (Debian)"]);
+
+            $("#InputText").keyup(function() {
+                // Extract the source
+                var sourceVal = $(this).val();
+
+                // Check if it has changed.
+                if (previousReferenceText == sourceVal) return;
+
+                // Manipulate it
+                var shares = secretSharing.encode(sourceVal);
+
+                // Display the result
+                $("#Share1").val(shares[0]);
+                $("#Share2").val(shares[1]);
+            });
+
+            $("#Share2").keyup(function() {
+                // Extract the shares
+                var shares = [$("#Share1").val(), $("#Share2").val()];
+
+                // Decode it
+                var decoding = secretSharing.decode(shares);
+
+                // Output the result
+                $("#Decoding").val(decoding);
+
+            });
+
+        });
+
+    </script>
+
+</head>
+<body>
+    <table style="width: 100%">
+        <tr>
+            <td colspan="2">
+                Input Text
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <textarea cols="80" id="InputText" style="width: 100%; font-size: 100%; font-family: 'corbel'"
+                    name="S1" rows="2"></textarea>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2" style="text-align: center">
+                V
+            </td>            
+        </tr>
+        <tr>
+            <td colspan="1">
+                <textarea cols="40" id="Share1" style="width: 100%; font-size: 100%; font-family: 'corbel'"
+                    name="S1" rows="11"></textarea>
+            </td>
+            <td colspan="1">
+                <textarea cols="40" id="Share2" style="width: 100%; font-size: 100%; font-family: 'corbel'"
+                    name="S1" rows="11"></textarea>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2" style="text-align: center">
+                V
+            </td>            
+        </tr>
+        <tr>
+            <td colspan="2">
+                <textarea cols="80" id="Decoding" style="width: 100%; font-size: 100%; font-family: 'corbel'"
+                    name="S1" rows="11"></textarea>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

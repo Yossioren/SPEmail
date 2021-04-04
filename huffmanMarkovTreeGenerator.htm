@@ -1,0 +1,96 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Huffman-Markov Tree Generator</title>
+    <style type="text/css">
+        </style>
+    <!-- Google API Loader - http://code.google.com/apis/ajaxlibs/ -->
+
+<!--    <script type="text/javascript" src="http://www.google.com/jsapi"></script>
+    <script type="text/javascript">
+        /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  */
+        
+
+        // Load jQuery
+        google.load("jquery", "1", { uncompressed: true });
+    </script>-->
+    <script type="text/javascript" src="jquery-1.2.6.js"></script>
+    <!--<script type="text/javascript" src="json-spaced.js"></script>-->
+    <script type="text/javascript" src="jquery.json.js"></script>
+    <script type="text/javascript" src="codec.huffmanmarkov.generator.js"></script>
+
+    <script type="text/javascript">
+        /// <reference path = "jquery-1.2.6-vsdoc.js" />
+
+        $(document).ready(function() {
+            var NEW_SENTENCE = "_NewSentence";
+
+
+            var treeBuilder = new HuffmanMarkovTreeGenerator();
+            var previousReferenceText = "";
+            var HuffmanMarkovTrees;
+
+            $("#ReferenceText").keyup(function() {
+                // Extract the source
+                var sourceVal = $(this).val();
+
+                // Check if it has changed.
+                if (previousReferenceText == sourceVal) return;
+
+                // Manipulate it
+                HuffmanMarkovTrees = treeBuilder.buildHuffmanMarkovTrees(sourceVal);
+
+                // Show the trees and their statistics
+                $("#HuffmanMarkovTrees").val("var debian = " + $.toJSON(HuffmanMarkovTrees) + ";");
+                $("#Statistics").val($.toJSON(treeBuilder.statistics));
+
+                previousReferenceText = sourceVal;
+            });
+
+        });
+  
+    </script>
+
+</head>
+<body>
+    <table style="width: 100%">
+        <tr>
+            <td colspan="2">
+                Reference Text
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <textarea cols="80" id="ReferenceText" style="width: 100%; font-size: 100%; font-family: 'corbel'"
+                    name="S1" rows="8"></textarea>
+            </td>
+        </tr>
+        <tr>
+            <td style="text-align: center">
+                V
+            </td>
+            <td style="text-align: center">
+            </td>
+            
+        </tr>
+        <tr>
+            <td style="text-align: center">
+                HuffmanMarkov Trees
+            </td>
+            <td style="text-align: center">
+                Statistics
+            </td>
+        </tr>
+        <tr>
+           <td>
+                <textarea cols="80" id="HuffmanMarkovTrees" style="width: 100%; font-size: 100%; font-family: 'corbel'"
+                    name="S2" rows="8"></textarea>
+            </td>
+           <td>
+                <textarea cols="80" id="Statistics" style="width: 100%; font-size: 100%; font-family: 'corbel'"
+                    name="S3" rows="8"></textarea>
+            </td>
+         </tr>
+    </table>
+</body>
+</html>

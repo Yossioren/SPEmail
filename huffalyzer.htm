@@ -1,0 +1,539 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Huffalyzer</title>
+    <style type="text/css">
+        </style>
+    <!-- Google API Loader - http://code.google.com/apis/ajaxlibs/ -->
+
+<!--    <script type="text/javascript" src="http://www.google.com/jsapi"></script>
+    <script type="text/javascript">
+        /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  */
+        
+
+        // Load jQuery
+        google.load("jquery", "1", { uncompressed: true });
+    </script>-->
+    <script type="text/javascript" src="jquery-1.2.6.js"></script>
+    <!--<script type="text/javascript" src="json-spaced.js"></script>-->
+    <script type="text/javascript" src="jquery.json.js"></script>
+
+   <!-- <script type="text/javascript" src="first2KLinesOfCopperfield.js"></script>-->
+
+    <script type="text/javascript">
+        /// <reference path = "jquery-1.2.6-vsdoc.js" />
+        var CopperfieldTheAndI = {
+             "the": { "_FanIn": 283, "partially": 1, "time": 4, "locker": 1, "reception": 1, "ashes": 1, "weaknesses": 1, "faults": 1, "very": 3, "parental": 1, "sense": 1, "unhappy": 2, "base": 1, "pecuniary": 3, "avaricious": 1, "engrossing": 1, "latter": 2, "partnership": 2, "four": 1, "estate": 2, "receiver": 1, "money": 3, "monster": 1, "garb": 1, "lowest": 1, "most": 2, "peroration": 1, "landscape": 1, "frailest": 1, "labour": 1, "smallest": 1, "pressure": 1, "shadows": 1, "watchful": 1, "struggle": 1, "right": 1, "sprinkling": 1, "room.": 1, "doors": 1, "books": 2, "ruler.": 1, "key": 1, "authority": 1, "collar": 1, "moment": 2, "utmost": 2, "last": 3, "wildest": 1, "deed": 2, "first": 5, "clear": 1, "plain": 1, "meanwhile": 1, "law": 1, "Guildhall": 1, "same": 9, "spirit": 1, "box": 1, "part": 2, "ground": 2, "room": 2, "door": 3, "world.": 1, "world": 2, "satisfaction": 1, "re": 1, "company": 1, "contemplation": 1, "Author": 1, "hurry": 1, "dawn": 1, "dear": 4, "miseries": 1, "knowledge": 1, "street": 1, "sitting": 1, "bosom": 1, "family.": 1, "unconscious": 1, "end": 3, "family": 1, "best": 1, "strength": 1, "chorus": 1, "poor": 1, "removal": 1, "late": 1, "Church": 1, "Choir.": 1, "venerable": 1, "next": 4, "opera": 1, "dream": 1, "fallacious": 1, "by": 1, "principal": 1, "only": 2, "fire": 3, "capital": 1, "word.": 1, "circumstances": 1, "country": 1, "social": 1, "legitimate": 1, "conviction": 1, "land": 2, "kindness": 1, "habits": 2, "kangaroo": 1, "hardy": 1, "unsettled": 1, "bullocks": 1, "eye": 1, "moving": 1, "Little": 1, "time.": 1, "day": 2, "sunlight": 1, "bedside": 1, "little": 1, "quiet": 1, "blue": 1, "freshest": 1, "pillow": 2, "glass": 1, "flowers": 1, "old": 2, "day.": 1, "morning": 1, "living": 1, "dead.": 1, "same.": 1, "merit": 1, "parlour": 1, "message.": 1, "night": 1, "truth": 1, "sum": 1, "sea": 1, "image": 1, "state": 1, "Future": 1, "energy": 1, "grave.": 1, "events": 1, "beginning": 1, "tender": 1, "restoration": 1, "project": 1, "stained": 1, "church": 1, "calamity": 1, "fullness": 1, "Angel": 1, "first.": 1, "'final": 1, "departure": 1, "emigrants.": 1, "request": 1, "conclusion": 1, "language": 1, "shore": 1, "sea.'": 1, "ocean": 1, "amounts": 1, "various": 1, "requisite": 1, "teeming": 1, "act": 1, "mercantile": 1, "Jews": 1, "destiny": 1, "process": 1, "pigs": 1, "poorer": 1, "past": 2, "art": 1, "rugged": 1, "credit": 1, "hand": 2, "lion": 1, "lamb": 1, "light": 1, "subject.": 1, "subject": 1, "frigid": 1, "gulf": 1, "Money": 1, "whole": 4, "eve": 1, "occasion": 1, "aggregate": 1, "appearance": 1, "heap": 1, "table": 2, "justice": 1, "distracted": 1, "immense": 1, "investigations": 1, "incubus": 1, "dreadful": 1, "hopeful": 1, "less": 1, "papers": 1, "table.": 1, "second": 1, "house": 2, "recommendation": 1, "toils": 1, "love": 1, "papers.": 1, "other": 1, "rest": 1, "trial": 1, "power": 1, "light.": 1, "fraud.'": 1, "blame": 1, "letter": 1, "fact": 1, "gratification": 1, "hatred": 1, "London": 1 },
+               "I": { "_FanIn": 259, "am": 25, "was": 8, "say": 3, "undertake": 1, "whispered": 1, "trust": 1, "ask": 1, "have": 29, "did": 2, "had": 6, "got": 1, "will": 2, "mentioned.'": 1, "beheld": 1, "want": 8, "believed": 2, "wouldn't": 1, "didn't": 3, "know": 8, "don't": 7, "hastened": 1, "cannot": 9, "haven't": 1, "really": 2, "Copperfield": 1, "declare": 1, "think": 5, "told": 3, "'it": 1, "picked": 1, "shouldn't": 2, "think.": 1, "dare": 1, "went": 1, "parted": 1, "owed": 1, "felt": 1, "came": 3, "shall": 6, "wonder": 1, "may": 6, "could": 5, "believe": 3, "assure": 1, "ever": 2, "must": 1, "do.": 1, "do": 3, "sit": 4, "smile": 1, "first": 2, "used": 2, "gave": 1, "was.'": 1, "can": 6, "be": 1, "see": 2, "always": 2, "hope": 2, "hold": 2, "lay": 1, "feel": 2, "try": 1, "to": 1, "might": 2, "never": 4, "loved": 1, "speak": 1, "promise": 1, "go": 2, "give": 1, "look": 1, "knew": 1, "fully": 1, "even": 1, "should": 2, "assume": 1, "began": 1, "waited": 1, "mean": 1, "originally": 1, "wish": 2, "beg": 1, "regret": 1, "own": 1, "suppose": 2, "said": 1, "thought": 2, "view": 1, "lived": 1, "necessarily": 1, "were": 1, "would": 2, "possess": 1, "after": 1, "'": 1, "recommend": 1, "owe": 1, "rent": 1, "paid": 2, "lost": 1, "wanted": 1, "find": 1, "needn't": 1, "consider": 1}
+        //"I": { "_FanIn": 259, "am": 25, "was": 8, "say": 3, "undertake": 1, "whispered": 1, "trust": 1, "ask": 1, "have": 29, "did": 2, "had": 6, "got": 1}
+            };
+
+            $(document).ready(function() {
+                var NEW_SENTENCE = "_NewSentence";
+                // Here's some OOP here:
+                function Codec() {
+                };
+
+                Codec.prototype.encode = function(inText) {
+                    return inText;
+                }
+
+                Codec.prototype.decode = function(inText) {
+                    return inText;
+                }
+
+                function HuffmanMarkovEncoder(huffmanTrees) {
+                    // TODO: refactor setState
+                    this.huffmanTrees = huffmanTrees;
+                    this.unhandledBits = "_";
+                    this.state = this.huffmanTrees[NEW_SENTENCE];
+                };
+                HuffmanMarkovEncoder.prototype = new Codec();
+                HuffmanMarkovEncoder.prototype.constructor = Codec;
+                HuffmanMarkovEncoder.prototype.baseClass = Codec.prototype.constructor;
+
+                // Reset to the home state - beginning of the sentence no unhandled characters,
+                HuffmanMarkovEncoder.prototype.reset = function() {
+                    this.unhandledBits = "_";
+                    // TODO: define _NewSentence
+                    // TODO: maximum length limit for huffman trees
+                    this.state = this.huffmanTrees[NEW_SENTENCE];
+                }
+
+                HuffmanMarkovEncoder.prototype.navigate = function(bit) {
+
+                    var result = "";
+
+                    // Zoom through all states with 0 bits of information.
+                    // TODO: refactor!
+                    while (this.state["_"] != null) {
+                        var nextWord = this.state["_"];
+
+                        // emit the word
+                        // TODO - refactor!
+                        if (nextWord == NEW_SENTENCE) {
+                            result += ".  ";
+                        } else {
+                            // Strip the leading "@"
+                            result += nextWord.substring(1) + " ";
+                        }
+
+                        // move to the requested state
+                        this.state = this.huffmanTrees[nextWord];
+                    }
+
+                    // Add the bit to our unhandled bits.
+                    this.unhandledBits += bit;
+
+
+                    // Check if this sequence can be handled.
+                    if (this.state[this.unhandledBits] != null) {
+                        var nextWord = this.state[this.unhandledBits];
+
+                        // emit the word
+                        // TODO - refactor!
+                        if (nextWord == NEW_SENTENCE) {
+                            result += ".  ";
+                        } else {
+                            result += nextWord.substring(1) + " ";
+                        }
+
+                        // move to the requested state
+                        this.state = this.huffmanTrees[nextWord];
+                        this.unhandledBits = "_";
+                    }
+
+                    // Zoom through all states with 0 bits of information.
+                    // TODO: refactor!
+                    while (this.state["_"] != null) {
+                        var nextWord = this.state["_"];
+
+                        // emit the word
+                        // TODO - refactor!
+                        if (nextWord == NEW_SENTENCE) {
+                            result += ".  ";
+                        } else {
+                            result += nextWord.substring(1) + " ";
+                        }
+
+                        // move to the requested state
+                        this.state = this.huffmanTrees[nextWord];
+                    }
+
+                    return result;
+
+                }
+
+                HuffmanMarkovEncoder.prototype.encode = function(inText) {
+                    var output = "";
+
+                    // OK, accept arbitrary inputs!
+                    // TODO: binary streamer (if memory is an object)
+                    inTextAsBinary = inText.split("");
+
+                    // Return to the home state.
+                    this.reset();
+
+                    while (inTextAsBinary != "") {
+                        // Get another bit
+                        var nextByte = inTextAsBinary.shift().charCodeAt(0) & 0xff;
+                        for (var i = 0; i < 8; i++) {
+                            var nextBit = nextByte & 1;
+                            // Navigate in the trees, emit any characters that come out.
+                            output += this.navigate(nextBit);
+                            nextByte = nextByte >> 1;
+                        }
+                    }
+
+                    // Now add "1000..." until we're done emitting.
+                    output += this.navigate("1");
+                    var flush = "";
+                    while (flush == "") {
+                        flush = this.navigate("0");
+                    }
+                    output += flush;
+
+                    return output;
+                }
+                HuffmanMarkovEncoder.prototype.decode = function(inText) {
+                    return inText.toLowerCase();
+                }
+
+                function TreeNode(word, count) { // TBD
+                    this.word = word;
+                    this.count = count;
+                }
+
+                function HuffmanTreeBuilder() {
+                    this.huffmanTrees = new Array();
+                    this.wordList = new Array();
+                    this.statistics = new Array();
+                };
+
+                // Create the two-word distribution table for the given source text
+                HuffmanTreeBuilder.prototype.buildWordDistribution = function(inText) {
+                    // A new sentence is the ground state for our field.
+                    previousWord = NEW_SENTENCE;
+                    // The fan-in of a new sentence is 0... we actually only care about the fan out here.
+                    this.wordList = new Array();
+                    this.wordList[NEW_SENTENCE] = { "_FanIn": "0" };
+
+                    // For each word in the document:
+                    // TODO: This regex should be tweaked:
+                    // TODO: refactor this function!  It sucks!!!
+                    // Mr. Mrs. and so on should not end a sentence
+                    // Quotations should be handled properly
+                    allWords = inText./*toLowerCase().*/split(/[^a-zA-Z\'\.\"]/);
+                    for (word in allWords) {
+                        // Check if it's the end of a sentence.
+                        var endOfSentence = (allWords[word].lastIndexOf(".") != -1);
+
+                        var currentWord;
+                        // Trim the period
+                        if (endOfSentence) {
+                            currentWord = allWords[word].substr(0, allWords[word].length - 1);
+                        } else {
+                            currentWord = allWords[word];
+                        }
+
+
+                        // Skip unprintable characters.
+                        if (currentWord.length == 0) continue;
+
+                        // Add "@" to the beginning of the word (to stay away from reserved keywords such as sort, length, concat etc)
+                        currentWord = "@" + currentWord;
+
+                        // Increment the fan-out of the previous word
+                        if (currentWord in this.wordList[previousWord]) {
+                            this.wordList[previousWord][currentWord]++;
+                        } else {
+                            this.wordList[previousWord][currentWord] = 1;
+                        }
+
+
+                        // Increment the fan-in of this current word.
+                        if (currentWord in this.wordList) {
+                            this.wordList[currentWord]._FanIn++;
+                        } else {
+                            this.wordList[currentWord] = { "_FanIn": 1 };
+                        }
+
+                        previousWord = currentWord;
+                        // if this ends with a period, automatically move on to the "new sentence" state.
+                        // TODO: use constants!
+                        if (endOfSentence) {
+                            if (NEW_SENTENCE in this.wordList[previousWord]) {
+                                this.wordList[previousWord][NEW_SENTENCE]++;
+                            } else {
+                                this.wordList[previousWord][NEW_SENTENCE] = 1;
+                            }
+
+                            previousWord = NEW_SENTENCE;
+                            this.wordList[NEW_SENTENCE]._FanIn++;
+                        }
+
+                    };
+
+                    // Point the last word to the New Sentence state.
+                    // TODO: yuck! refactor!
+                    if (NEW_SENTENCE in this.wordList[previousWord]) {
+                        this.wordList[previousWord][NEW_SENTENCE]++;
+                    } else {
+                        this.wordList[previousWord][NEW_SENTENCE] = 1;
+                    }
+
+                    previousWord = NEW_SENTENCE;
+                    this.wordList[NEW_SENTENCE]._FanIn++;
+                }
+
+                // Dequeue and return the lower value of the two queues.
+                // My queues are filled at [length] and emptied at [0]... TODO: do I use shift/unshift?
+                HuffmanTreeBuilder.prototype.dequeueLowest = function(a, b) {
+                    // If one of the queues is empty, dequeue from the other one
+                    if (a.length == 0) {
+                        if (b.length == 0)
+                            return null;
+                        else
+                            return b.shift();
+                    }
+
+                    if (b.length == 0) {
+                        return a.shift();
+                    }
+
+                    // Otherwise, check which of the two entries is smaller
+                    if (a[0].wt < b[0].wt) {
+                        return a.shift();
+                    } else {
+                        return b.shift();
+                    }
+                }
+
+                // Build a single Huffman trees for a given word in the document.
+                HuffmanTreeBuilder.prototype.buildHuffmanTree = function(wordDistribution) {
+                    // Wikipedia algorithm, all comments from source: http://en.wikipedia.org/wiki/Huffman_coding
+
+                    // create a two queues, the first one containing the initial weights (along with pointers to the associated leaves),
+                    var initialWeights = new Array();
+
+                    // the second one containing the combined weights (along with pointers to the trees)
+                    var combinedWeights = new Array();
+
+                    // Enqueue all leaf nodes into the first queue 
+                    // (by probability in increasing order so that the least likely item is in the head of the queue).
+                    // TODO!!! Convert to a functional array operation (zip, split, etc.)
+                    for (var i in wordDistribution) {
+                        if (i != "_FanIn") {
+                            initialWeights.push({ wt: wordDistribution[i], wd: i });
+                        }
+                    }
+
+                    initialWeights.sort(function(a, b) { return a.wt - b.wt });
+
+                    // While there is more than one node in the queues
+                    while (parseInt(initialWeights.length) + parseInt(combinedWeights.length) > 1) {
+                        // Dequeue the two nodes with the lowest weight by examining the fronts of both queues
+                        var leftNode = this.dequeueLowest(initialWeights, combinedWeights);
+                        var rightNode = this.dequeueLowest(initialWeights, combinedWeights);
+                        // Yossi: what do I do if there's no node on the right?  I need a unique decoding!
+
+                        // Create a new internal node,
+                        var internalNode = {
+                            // with the two just-removed nodes as children 
+                            l: leftNode, r: rightNode,
+                            // and the sum of their weights as the new weight
+                            wt: parseInt(leftNode.wt) + parseInt(rightNode.wt)
+                        };
+
+                        // Enqueue the new node into the rear of the second queue
+                        combinedWeights.push(internalNode);
+                    }
+
+                    // The remaining node is the root node; the tree has now been generated
+                    return this.dequeueLowest(initialWeights, combinedWeights);
+                }
+
+                // Collapse the tree into an associative array.
+                HuffmanTreeBuilder.prototype.flattenTree = function(node, label) {
+                    // If we're a leaf, return a leaf.
+                    if (node.wd != null) {
+                        var ret = new Array();
+                        ret[label] = node.wd;
+                        return ret;
+                    }
+
+                    // Otherwise, combine the left and the right
+                    var leftTree = this.flattenTree(node.l, label + "0");
+                    var rightTree = this.flattenTree(node.r, label + "1");
+
+                    // Concatenate the two arrays.
+                    for (var a in leftTree)
+                        rightTree[a] = leftTree[a];
+
+                    return rightTree;
+
+                }
+
+                // Build a set of Huffman trees, one for each word in the document.
+                HuffmanTreeBuilder.prototype.buildHuffmanTreesFromWordList = function() {
+                    // For each word in the word list
+                    for (word in this.wordList) {
+                        // Build a huffman tree for this word.
+                        this.huffmanTrees[word] = this.buildHuffmanTree(this.wordList[word]);
+                        this.flatHuffmanTrees[word] = this.flattenTree(this.huffmanTrees[word], "_");
+                    }
+                }
+
+                // Recursive function to measure the bits per letter of a single word in the word list.
+                HuffmanTreeBuilder.prototype.measureEntropies = function(node, depth) {
+                    if (node == null)
+                        return 0;
+
+                    // Is this a leaf node?
+                    // Contribution to probability is 2^(-depth)
+                    if (node.wd != null) {
+                        // TODO - newsentence into "."
+                        if (node.wd == NEW_SENTENCE)
+                        // TODO: what's the real he contribution of a new sentence??
+                            return ({ bitsPerWord: depth * 1.0 / (1 << depth), bitsPerLetter: depth * 1.0 / (1 << depth) });
+                            // I'm subtracting 1 because words are prefixed with "_"
+                        return ({ bitsPerWord: depth * 1.0 / (1 << depth), bitsPerLetter: depth * 1.0 / (1 << depth) / (node.wd.length - 1) });
+                    } else {
+                        // Recurse over the children
+                        leftEntropies = this.measureEntropies(node.l, parseInt(depth) + 1);
+                        rightEntropies = this.measureEntropies(node.r, parseInt(depth) + 1);
+                        var retval = {
+                            bitsPerWord: parseFloat(leftEntropies.bitsPerWord) + parseFloat(rightEntropies.bitsPerWord),
+                            bitsPerLetter: parseFloat(leftEntropies.bitsPerLetter) + parseFloat(rightEntropies.bitsPerLetter)
+                        };
+                        return retval;
+                    }
+                }
+
+                // Calculate the statistics of a generated Huffman tree set
+                HuffmanTreeBuilder.prototype.calculateStatistics = function() {
+                    // Count the total word/letter count of the reference text
+                    this.statistics = {
+                        totalWords: 0,
+                        totalLetters: 0,
+                        totalUniqueWords: 0,
+                        bitsPerLetter: 0,
+                        bitsPerWord: 0
+                    };
+
+                    for (var i in this.wordList) {
+                        if (i != NEW_SENTENCE) {
+                            this.statistics.totalWords += parseInt(this.wordList[i]._FanIn);
+                            this.statistics.totalUniqueWords++;
+                            this.statistics.totalLetters += i.length;
+                        }
+                    }
+
+                    var entropies = new Array();
+                    for (var i in this.wordList) {
+                        if (i != NEW_SENTENCE) {
+                            // Count the entropy rate per word or per letter
+                            entropies[i] = this.measureEntropies(this.huffmanTrees[i], 0);
+
+                            // Add the normalized count to the total statistics
+                            this.statistics.bitsPerLetter +=
+                                parseFloat(entropies[i].bitsPerLetter) * this.wordList[i]._FanIn / this.statistics.totalWords;
+
+                            this.statistics.bitsPerWord +=
+                                parseFloat(entropies[i].bitsPerWord) * this.wordList[i]._FanIn / this.statistics.totalWords;
+                        }
+                    }
+
+                    // Convert the per-letter measurements into the expansion factor
+                    this.statistics.lettersPerByte =
+                        8 / this.statistics.bitsPerLetter;
+
+
+                }
+
+                // Create a Markov-Huffman set for a given source text
+                HuffmanTreeBuilder.prototype.buildHuffmanTrees = function(inText) {
+                    // Create the Huffman tree:
+                    // Delete the tree
+                    this.wordList = {};
+                    this.huffmanTrees = {};
+                    this.flatHuffmanTrees = {};
+
+                    // mocka mocka mocka!
+                    if (true) {
+                        // Find the bi-word distribution of the input text.
+                        this.buildWordDistribution(inText);
+
+                        // Build a set of Huffman encodings for each word in the word list
+                        this.buildHuffmanTreesFromWordList();
+
+                        // Calculate statistics the results
+                        this.calculateStatistics();
+                    } else {
+                        this.huffmanTrees = first2KLinesOfCopperfield;
+                    }
+
+
+                    // Return its JSON version.
+                    // return $.toJSON(this.huffmanTrees, "\r\n");
+                    return this.flatHuffmanTrees;
+                }
+
+
+                var treeBuilder = new HuffmanTreeBuilder();
+                var previousReferenceText = "";
+                var huffmanTrees;
+                var codec;
+
+                $("#ReferenceText").keyup(function() {
+                    // Extract the source
+                    var sourceVal = $(this).val();
+
+                    // Check if it has changed.
+                    if (previousReferenceText == sourceVal) return;
+
+                    // Manipulate it
+                    huffmanTrees = treeBuilder.buildHuffmanTrees(sourceVal);
+
+                    // Show statistics
+                    $("#HuffmanTrees").val($.toJSON(treeBuilder.statistics));
+
+                    // Construct a Huffman encoder based on the trees.
+                    codec = new HuffmanMarkovEncoder(huffmanTrees);
+
+
+                    previousReferenceText = sourceVal;
+                });
+
+                $("#InputText").keyup(function() {
+                    // Extract the source
+                    var sourceVal = $(this).val();
+
+                    // Manipulate it
+                    destVal = codec.encode(sourceVal);
+
+                    $("#Target").val(destVal);
+                });
+            });
+  
+    </script>
+
+</head>
+<body>
+    <table style="width: 100%">
+        <tr>
+            <td colspan="2">
+                Reference Text
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <textarea cols="80" id="ReferenceText" style="width: 100%; font-size: 100%; font-family: 'corbel'"
+                    name="S1" rows="8"></textarea>
+            </td>
+        </tr>
+        <tr>
+            <td style="text-align: center">
+                V
+            </td>
+            <td style="text-align: center">
+            </td>
+            
+        </tr>
+        <tr>
+            <td style="text-align: center">
+                Huffman Trees
+            </td>
+            <td style="text-align: center">
+                Input Text
+            </td>
+        </tr>
+        <tr>
+           <td>
+                <textarea cols="80" id="HuffmanTrees" style="width: 100%; font-size: 100%; font-family: 'corbel'"
+                    name="S2" rows="8"></textarea>
+            </td>
+           <td>
+                <textarea cols="80" id="InputText" style="width: 100%; font-size: 100%; font-family: 'corbel'"
+                    name="S3" rows="8"></textarea>
+            </td>
+         </tr>
+        <tr>
+            <td colspan="2" style="text-align: center">
+                V
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                Target
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <textarea cols="80" id="Target" style="width: 100%; font-size: 100%; font-family: 'corbel'"
+                    name="S1" rows="8"></textarea>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

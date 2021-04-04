@@ -1,0 +1,144 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Huffman Encoder Demo</title>
+    <style type="text/css">
+        </style>
+    <!-- Google API Loader - http://code.google.com/apis/ajaxlibs/ -->
+
+<!--    <script type="text/javascript" src="http://www.google.com/jsapi"></script>
+    <script type="text/javascript">
+        /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  */
+        
+
+        // Load jQuery
+        google.load("jquery", "1", { uncompressed: true });
+    </script>-->
+    <script type="text/javascript" src="jquery-1.2.6.js"></script>
+    <!--<script type="text/javascript" src="json-spaced.js"></script>-->
+    <script type="text/javascript" src="jquery.json.js"></script>
+    <script type="text/javascript" src="codec.js"></script>
+
+    <script type="text/javascript" src="codec.base64.js"></script>
+
+    <script type="text/javascript" src="codec.commonwords2.js"></script>
+    <script type="text/javascript" src="256mostcommon.js"></script>
+
+    <script type="text/javascript" src="huffmanTreeSamples2.js"></script>
+    <script type="text/javascript" src="codec.huffman.js"></script>
+    <script type="text/javascript" src="codec.huffmanmarkov.js"></script>
+
+    <script type="text/javascript">
+        /// <reference path = "jquery-1.2.6-vsdoc.js" />
+
+        // TODO:
+        previousReferenceText = "";
+
+        // Instantiate a set of sample codecs
+        var codecs = {};
+        
+        function initializeCodecs() {
+            codecs["Plain"] = new Codec();
+            codecs["Base 64"] = new Base64Codec();
+            codecs["256 most common words in English"] = new CommonWordsCodec(encode256mc);
+            codecs["Huffman (David Copperfield)"] = new HuffmanCodec(copperfieldSingleTree);
+            codecs["Huffman-Markov (David Copperfield)"] = new HuffmanMarkovCodec(copperfield, true);
+            codecs["Huffman-Markov (RFC 793)"] = new HuffmanMarkovCodec(rfc793);
+        };
+
+        function allCodecsAtOnce(fn, inputs) {
+            var result = {};
+
+            // Encode: all with the same input.
+            // TODO: can this be made functional?
+            if (fn == "encode") {
+                for (var codec in codecs) {
+                    result[codec] = codecs[codec].encode(inputs);
+                }
+            }
+
+            // Decode: each with a different input.
+            if (fn == "decode") {
+                for (var codec in codecs) {
+                    result[codec] = codecs[codec].decode(inputs[codec]);
+                }
+            }
+
+            return result;
+        }
+
+        $(document).ready(function() {
+        initializeCodecs();
+
+            $("#InputText").keyup(function() {
+                // Extract the source
+                var sourceVal = $(this).val();
+
+                // Check if it has changed.
+                if (previousReferenceText == sourceVal) return;
+
+                // Manipulate it
+                var allEncodings = allCodecsAtOnce("encode", sourceVal);
+
+                // Pretty-print the result
+                var encoding = "";
+                for (var codec in allEncodings) {
+                    encoding += codec + ":\n\t" + allEncodings[codec] + "\n";
+                }
+                $("#Encoding").val(encoding);
+
+                // Decode it
+                var allDecodings = allCodecsAtOnce("decode", allEncodings);
+
+                // Pretty-print the result
+                var decoding = "";
+                for (var codec in allDecodings) {
+                    decoding += codec + ":\n\t" + allDecodings[codec] + "\n";
+                }
+                $("#Decoding").val(decoding);
+
+            });
+
+        });
+
+    </script>
+
+</head>
+<body>
+    <table style="width: 100%">
+        <tr>
+            <td colspan="2">
+                Input Text
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <textarea cols="80" id="InputText" style="width: 100%; font-size: 100%; font-family: 'corbel'"
+                    name="S1" rows="2"></textarea>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2" style="text-align: center">
+                V
+            </td>            
+        </tr>
+        <tr>
+            <td colspan="2">
+                <textarea cols="80" id="Encoding" style="width: 100%; font-size: 100%; font-family: 'corbel'"
+                    name="S1" rows="13"></textarea>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2" style="text-align: center">
+                V
+            </td>            
+        </tr>
+        <tr>
+            <td colspan="2">
+                <textarea cols="80" id="Decoding" style="width: 100%; font-size: 100%; font-family: 'corbel'"
+                    name="S1" rows="13"></textarea>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>
